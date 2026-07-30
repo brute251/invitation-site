@@ -316,8 +316,8 @@ $$('#rsvp-opts .btn').forEach(b => {
     $('#rsvp').hidden = true;
     const d = $('#done'); d.hidden = false;
     $('#done-p').innerHTML = r === 'trina'
-      ? 'Trina n\'est pas invitée.<br>Toi si.<br><small>dimanche 2 août, 18h. La Cité, Saint-Ouen.</small>'
-      : 'Dimanche 2 août, 18h.<br>La Cité, Saint-Ouen.<br><small>toujours pas de canapé. toujours pas de clim.</small>';
+      ? 'Trina n\'est pas invitée.<br>Toi si.<br><small>dimanche 2 août, 18h. La Cité (Saint-Ouen).</small>'
+      : 'Dimanche 2 août, 18h.<br>La Cité (Saint-Ouen).<br><small>toujours pas de canapé. toujours pas de clim.</small>';
     burst(); setTimeout(burst, 350); setTimeout(burst, 700);
     d.scrollIntoView({behavior:'smooth', block:'center'});
   });
