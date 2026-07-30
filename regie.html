@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Régie · suivi</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font:15px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;background:#0f1220;color:#dfe4ff;padding:20px}
+  .wrap{max-width:640px;margin:0 auto}
+  h1{font-size:19px;margin-bottom:2px}
+  .sub{color:#7a85b8;font-size:12.5px;margin-bottom:18px}
+  .card{background:#171b30;border:1px solid #2a3157;border-radius:8px;padding:14px;margin-bottom:14px}
+  .row{display:grid;grid-template-columns:26px 74px 1fr;gap:9px;padding:6px 0;border-bottom:1px solid #222842;align-items:baseline}
+  .row:last-child{border-bottom:0}
+  .row.todo{opacity:.32}
+  .t{color:#7a85b8;font-size:12.5px}
+  .lab{color:#dfe4ff}
+  .extra{color:#f2a33c;font-size:12.5px}
+  .big{font-size:15px;font-weight:700;margin-bottom:9px;color:#4fd6c6}
+  .none{color:#7a85b8;font-style:italic}
+  button{font:inherit;background:#2a3157;color:#dfe4ff;border:0;border-radius:6px;padding:8px 12px;cursor:pointer}
+  .bar{height:7px;background:#222842;border-radius:99px;overflow:hidden;margin:10px 0 16px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#4fd6c6,#f2a33c);width:0;transition:width .4s}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Régie</h1>
+  <p class="sub">suivi du parcours de Maud, rafraîchit tout seul toutes les 5 s</p>
+
+  <div class="card">
+    <div class="big" id="state">en attente…</div>
+    <div class="bar"><i id="bar"></i></div>
+    <div id="steps"></div>
+  </div>
+
+  <div class="card">
+    <div class="big">Journal brut</div>
+    <div id="log"><p class="none">rien pour l'instant</p></div>
+  </div>
+
+  <button id="reset">vider le journal (test)</button>
+</div>
+
+<script>
+const STEPS = [
+  ['rideau_ouvert',  'Rideau ouvert'],
+  ['dossier_depose', 'Dossier déposé'],
+  ['quiz_q1',        'Question 1'],
+  ['quiz_q2',        'Question 2'],
+  ['quiz_q3',        'Question 3'],
+  ['profil_vu',      'Profil découvert'],
+  ['rsvp',           'A répondu']
+];
+
+const hhmm = t => new Date(t).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+
+function read(){
+  try{ return JSON.parse(localStorage.getItem('ha_log') || '[]'); }catch(e){ return []; }
+}
+
+function render(){
+  const log = read();
+  const first = {};
+  log.forEach(r => { if(!(r.event in first)) first[r.event] = r; });
+
+  let done = 0;
+  document.getElementById('steps').innerHTML = STEPS.map(([k,label]) => {
+    const hit = first[k];
+    if(hit) done++;
+    return `<div class="row ${hit?'':'todo'}">
+      <span>${hit?'✅':'⬜'}</span>
+      <span class="t">${hit?hhmm(hit.t):'--:--'}</span>
+      <span class="lab">${label}${hit&&hit.extra?` <span class="extra">${hit.extra}</span>`:''}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('bar').style.width = (done/STEPS.length*100)+'%';
+
+  const rsvp = first['rsvp'];
+  document.getElementById('state').textContent =
+    rsvp ? `Elle a répondu : ${rsvp.extra}` :
+    done ? `En cours, étape ${done}/${STEPS.length}` : 'en attente…';
+
+  document.getElementById('log').innerHTML = log.length
+    ? log.slice().reverse().map(r =>
+        `<div class="row"><span></span><span class="t">${hhmm(r.t)}</span>
+         <span class="lab">${r.event}${r.extra?` <span class="extra">${r.extra}</span>`:''}</span></div>`).join('')
+    : '<p class="none">rien pour l\'instant</p>';
+}
+
+document.getElementById('reset').addEventListener('click', () => {
+  localStorage.removeItem('ha_log'); render();
+});
+
+render();
+setInterval(render, 5000);
+</script>
+</body>
+</html>
