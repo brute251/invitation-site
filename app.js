@@ -97,7 +97,6 @@ function wireSelect(sel, hintId){
     if(kind === 'no'){
       hint.textContent = msg || 'Refusé.';
       hint.classList.remove('ok');
-      sel.value = '';
       sel.classList.remove('shake'); void sel.offsetWidth; sel.classList.add('shake');
     }else if(kind === 'ok'){
       hint.textContent = msg || '';
@@ -210,6 +209,8 @@ const FEED = [
     txt:'SALUT !! j\'ai vu qu\'il y avait un truc dimanche. je suis dispo. je peux chanter. je ramène mon micro. RÉPONDS-MOI.' },
   { who:'Jade',  emoji:'✂️', color:'#2b2b3d', when:'il y a 44 min',
     txt:'Un dimanche. À Saint-Ouen. Sans canapé et sans clim. Amuse-toi bien.' },
+  { who:'Beck',  emoji:'🧥', color:'#5b3f8c', when:'il y a 25 min',
+    txt:'sa défense c\'était « je dormais dans la voiture ». et ça a marché. voilà. c\'est tout ce que j\'ai à dire.' },
   { who:'Rex',   emoji:'🪆', color:'#36c7b8', when:'il y a 12 min',
     txt:'attends tu vois un PILOTE ? t\'as pas trouvé mieux ? … bon, si. t\'as pas trouvé mieux. c\'est moi le mieux.' }
 ];
