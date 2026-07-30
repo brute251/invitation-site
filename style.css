@@ -194,6 +194,7 @@ input:focus,select:focus{outline:none;border-color:var(--cyan)}
 .post-av{
   width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;font-size:21px;color:#fff;
   border-radius:7px;-moz-border-radius:7px;-webkit-border-radius:7px;border:2px solid rgba(0,0,0,.25);
+  object-fit:cover;                 /* pour les vraies photos, pas seulement les emoji */
 }
 .post-who{font-size:14px;font-weight:700;color:var(--navy-txt);line-height:1.15}
 .post-when{font-size:11px;color:#8a95c4}

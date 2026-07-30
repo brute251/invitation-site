@@ -150,12 +150,12 @@ $('#btn-submit').addEventListener('click', () => {
 /* ═══════════ 2 · TEST D'ADMISSION ═══════════ */
 const QUIZ = [
   {
-    q:'De quelle couleur sont les cheveux de Cat Valentine ?',
+    q:'Saint-Ouen, c\'est…',
     opts:[
-      {t:'Rouge',  ok:true,  v:'Évidemment. Question offerte.'},
-      {t:'Blonde', ok:false, v:'Non. Elle le répète à peu près toutes les cinq minutes.'},
-      {t:'Brune',  ok:false, v:'Non. Elle le répète à peu près toutes les cinq minutes.'},
-      {t:'Bleue',  ok:false, v:'Non. Et arrête de tenter ta chance.'}
+      {t:'la jet set',   ok:true,  v:'Exact. C\'est dans la brochure depuis le 23 juillet.'},
+      {t:'le 93',        ok:false, v:'Techniquement. Mais on dit la jet set.'},
+      {t:'loin',         ok:false, v:'20 minutes de l\'aéroport. Argument irrecevable.'},
+      {t:'Montparnasse', ok:false, v:'Non. En voiture. À saint où et. Ouen.'}
     ]
   },
   {
