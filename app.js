@@ -51,14 +51,40 @@ function play(k){
   if(!soundOn) return;
   const el = $('#sfx-'+k);
   if(!el || !el.getAttribute('src')) return;
+  el.volume = VOLUME;             // on le réaffirme à chaque fois
   try{ el.currentTime = 0; el.play().catch(()=>{}); }catch(e){}
 }
-const VOLUME = 0.5;              // moitié moins fort
+
+const VOLUME = 0.25;             // plafond, jamais plus fort que ça
+let actx = null, gain = null;
+
 function armSound(){
   soundOn = true;
+
+  /* iOS ignore el.volume : on passe par un GainNode, dont l'atténuation
+     s'applique dans le graphe audio, donc avant la sortie du téléphone. */
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(AC && !actx){
+      actx = new AC();
+      gain = actx.createGain();
+      gain.gain.value = VOLUME;
+      gain.connect(actx.destination);
+    }
+    if(actx && actx.state === 'suspended') actx.resume();
+  }catch(e){ actx = gain = null; }
+
   for(const [k,src] of Object.entries(SFX)){
     const el = $('#sfx-'+k);
-    if(el){ el.setAttribute('src', src); el.volume = VOLUME; }
+    if(!el) continue;
+    el.setAttribute('src', src);
+    el.volume = VOLUME;            // filet de sécurité si le graphe échoue
+    if(gain && !el.dataset.wired){
+      try{
+        actx.createMediaElementSource(el).connect(gain);
+        el.dataset.wired = '1';
+      }catch(e){}
+    }
   }
 }
 
